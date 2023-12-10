@@ -1,0 +1,238 @@
+body {
+  margin: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  width: 100%;
+  position: relative;
+  height: 100%;
+}
+
+.material-symbols-outlined {
+  cursor: pointer;
+}
+li,
+a {
+  list-style: none;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
+//Navigation
+
+.navBar-section {
+  position: fixed;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  z-index: -999;
+  width: 100%;
+  display: block;
+  height: max-content;
+  overflow: hidden;
+
+  .topNavContainter {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    font-size: 20px;
+
+    .navBarListsContainer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: row;
+      width: 40%;
+      padding: 10px;
+
+      .searchInput {
+        align-self: flex-end;
+        width: max-content;
+
+        input {
+          padding: 15px;
+          border: none;
+          width: 100%;
+          border-radius: $input-radius;
+          background-color: $input-backgroundColor;
+          outline: none;
+          font-size: 15px;
+        }
+      }
+    }
+    .navBarListsContainer2 {
+      @extend .navBarListsContainer;
+      .navBarlists {
+        padding: 5px;
+      }
+      img {
+        cursor: pointer;
+      }
+      .navBarlistsActive {
+        @extend .navBarlists;
+        border-bottom: solid 3px $primary-hover;
+      }
+      width: 30%;
+    }
+  }
+}
+
+//Sidebar
+.sideBar-Section {
+  border: none;
+  background-color: $backgroundColor;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  height: 100%;
+  position: fixed;
+  display: block;
+  width: 20%;
+  top: 10.4%;
+
+  .sideBar-containter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    .sideBar {
+      @extend .sideBar-containter;
+      margin-top: 80px;
+      align-items: unset;
+      height: 25%;
+      justify-content: space-around;
+      .sideBar-contents {
+        display: flex;
+        color: $text-white;
+        width: max-content;
+        align-items: center;
+        padding-left: 80px;
+        .material-symbols-outlined {
+          padding-right: 10px;
+          color: $text-black;
+        }
+      }
+    }
+  }
+}
+
+//Account
+
+.accountSection {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    color: $secondary;
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }
+  .accountNavBar {
+    margin-top: 40px;
+  }
+  .accountContainer {
+    .error {
+      padding: 10px;
+      padding-left: 0px;
+      height: max-content;
+
+      small {
+        padding: 10px;
+        height: max-content;
+        background-color: $warning;
+        border-radius: 5px;
+      }
+    }
+    width: 40%;
+    padding: 2%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    .formInput {
+      position: relative;
+      margin-top: 5px;
+      margin-bottom: 30px;
+      width: 100%;
+      align-self: center;
+      input {
+        padding: 20px 40px 20px 20px;
+        width: 100%;
+        font-size: 15px;
+        transition: ease-in 1.5s;
+        box-sizing: border-box;
+        outline: none;
+        transition: ease-in 0.5s;
+        background-color: $input-backgroundColor;
+        border: none;
+        border-radius: $border-radius;
+        overflow: visible;
+      }
+      input:focus {
+        background-color: $input-backgroundColorLighter;
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+      }
+      .passwordVisibility {
+        position: absolute;
+        bottom: 3em;
+        top: 1em;
+        left: 90%;
+      }
+      button {
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+        font-size: 20px;
+        background-color: $secondary;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: $border-radius;
+        transition: 0.7 ease-in-out;
+      }
+      button:hover {
+        background-color: $secondary-hover;
+      }
+      button:disabled {
+        background-color: $disabled;
+      }
+    }
+    .reset_password {
+      margin-bottom: 50px;
+      a {
+        color: $primary;
+        text-decoration: underline;
+      }
+    }
+    .accountAlready {
+      a {
+        font-size: larger;
+        font-weight: 800;
+        text-decoration: underline;
+      }
+    }
+    .formError {
+      @extend .formInput;
+    }
+  }
+  .emailSent {
+    font-size: 20px;
+    margin-top: 35px;
+    width: max-content;
+    background-color: $success;
+    padding: 20px;
+    border-radius: 5px;
+  }
+}
+
+//GoogleLogin Button
+.googleDiv {
+  background-color: $primary-hover;
+  border-radius: $border-radius;
+  cursor: pointer;
+  width: max-content;
+  align-items: center;
+  display: flex;
+  padding: 5px;
+  .googleContent {
+    margin-left: 5px;
+    height: inherit;
+    text-align: center;
+  }
+}

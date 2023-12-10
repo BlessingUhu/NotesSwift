@@ -1,0 +1,41 @@
+import Link from "next/link";
+import styles from "../styles/Welcome.module.scss";
+import {redirect} from "next/navigation";
+import {getServerSession} from "next-auth";
+import {authOptions} from "../api/auth/[...nextauth]/route";
+import Image from "next/image";
+import logo from "/public/logo.png";
+
+export default async function Dashboard() {
+  const session = await getServerSession(authOptions);
+  if (session) redirect("/");
+
+  return (
+    <>
+      <main className={styles.main_container}>
+        <div className={styles.padding_container}>
+          <section className={styles.logo_section}>
+            <div className={styles.logo_container}>
+              <div>
+                <Image src={logo} height={300} width={300} alt={"Logo"}></Image>
+              </div>
+            </div>
+          </section>
+          <section className={styles.account_section}>
+            <div className={styles.account_container}>
+              <h1 className={styles.web_account}>To-Do App</h1>
+              <h4>Register Now</h4>
+              <Link href="/register">
+                <button className={styles.create_account}>Create Account</button>
+              </Link>
+              <p>---------------or--------------</p>
+              <Link href="/login">
+                <button className={styles.login}>Log in</button>
+              </Link>
+            </div>
+          </section>
+        </div>
+      </main>
+    </>
+  );
+}
