@@ -4,7 +4,8 @@ import Token from "@/models/tokenSchema";
 import connectMongoDB from "@/lib/mongoose";
 import {NextRequest, NextResponse} from "next/server";
 import nodemailer from "nodemailer";
-import {createHash} from "crypto";
+import {createHash, randomBytes} from "crypto";
+import {genSalt, hash} from "bcrypt-ts";
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,9 +24,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Setting up reset token
-    const arraybuffer = new ArrayBuffer(16);
-    const resetToken = crypto.getRandomValues(new Int32Array(arraybuffer))?.toString();
-    const hashedToken = createHash("sha256").update(resetToken).digest("hex");
+    // const arraybuffer = new ArrayBuffer(16);
+    // const resetToken = crypto.getRandomValues(new Int32Array(arraybuffer))?.toString();
+    // const hashedToken = createHash("sha256").update(resetToken).digest("hex");
+    const resetToken = randomBytes(16).toString("hex");
+    const hashedToken = await hash(resetToken, 10);
+    console.log(resetToken, hashedToken);
 
     // Saving token to database:
     const token = Token.create({
@@ -56,7 +60,7 @@ export async function POST(req: NextRequest) {
 
     emailTransporter.sendMail(message, function (error, info) {
       if (error) {
-        return NextResponse.json({message: "Email not sent. " + error}, {status: 400});
+        return NextResponse.json({message: "Email not sent. Issue with email server " + error}, {status: 400});
       }
     });
 

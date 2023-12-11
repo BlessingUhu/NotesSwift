@@ -5,27 +5,22 @@ import show_password from "public/show_password.png";
 import hide_password from "public/hide_password.png";
 import Image from "next/image";
 import logo from "public/logo.png";
-import {useState} from "react";
-import {useParams} from "next/navigation";
+import {useEffect, useState} from "react";
+import { useRouter} from "next/router";
 import connectMongoDB from "@/lib/mongoose";
 import Token from "@/models/tokenSchema";
 import {createHash} from "crypto";
+import {randomBytes} from "crypto";
+import {compare, hash} from "bcrypt-ts";
+
 
 export default function ForgotPassword() {
-  // const param = useParams();
+  const {resetToken, id} = useRouter().query
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [visible, setVisibility] = useState(true);
 
-  // await connectMongoDB();
-
-  // // if(!token){
-  // //   console.log("no token")
-  // // }
-  // const hashed = createHash("sha256").update(param.resetToken).digest("hex");
-  //   const token = await Token.findOne({token: hashed});
-
-  // console.log( param.resetToken, hashed);
+  console.log(resetToken, id)
 
   const handleSubmit = () => {};
   return (
@@ -77,13 +72,19 @@ export default function ForgotPassword() {
   );
 }
 
-// const validToken = async function () {
-//   const param = useParams()
-//   await connectMongoDB();
-//   const token = Token.findOne({token: param.resetToken})
-//   console.log(param)
+// const validToken = function () {
+//   const {resetToken, id} = useParams();
+//   useEffect(() => {
+//     const valid = async () => {
+//       await connectMongoDB();
 
-//   if(param.resetToken){
+//       const token = await Token.findOne({userID: id});
+//       const validToken = await compare(resetToken, token?.token);
 
-//   }
+//       if (validToken) {
+//         return true;
+//       }
+//       return false;
+//     };
+//   }, [resetToken, id]);
 // };
