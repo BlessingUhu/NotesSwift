@@ -1,14 +1,14 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "public/logo.png";
+import logo from "/public/logo.png";
 import {signIn} from "next-auth/react";
 import {NextResponse} from "next/server";
 import {useRouter} from "next/navigation";
 import {FormEventHandler, useState} from "react";
 import GoogleLogin from "@/components/googlebutton";
-import show_password from "public/show_password.png";
-import hide_password from "public/hide_password.png";
+import show_password from "/public/show_password.png";
+import hide_password from "/public/hide_password.png";
 
 export default function Signin() {
   const [email, setEmail] = useState("");

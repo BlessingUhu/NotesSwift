@@ -1,26 +1,26 @@
 "use client";
 import Link from "next/link";
 
-import show_password from "public/show_password.png";
-import hide_password from "public/hide_password.png";
+import show_password from "/public/show_password.png";
+import hide_password from "/public/hide_password.png";
 import Image from "next/image";
-import logo from "public/logo.png";
+import logo from "/public/logo.png";
 import {useEffect, useState} from "react";
-import { useRouter} from "next/router";
+import {useRouter} from "next/router";
 import connectMongoDB from "@/lib/mongoose";
 import Token from "@/models/tokenSchema";
 import {createHash} from "crypto";
 import {randomBytes} from "crypto";
 import {compare, hash} from "bcrypt-ts";
-
+import { useParams } from "next/navigation";
 
 export default function ForgotPassword() {
-  const {resetToken, id} = useRouter().query
+  // const {resetToken, id} = useRouter().;
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [visible, setVisibility] = useState(true);
 
-  console.log(resetToken, id)
+  // console.log(resetToken, id);
 
   const handleSubmit = () => {};
   return (
@@ -72,19 +72,20 @@ export default function ForgotPassword() {
   );
 }
 
-// const validToken = function () {
-//   const {resetToken, id} = useParams();
-//   useEffect(() => {
-//     const valid = async () => {
-//       await connectMongoDB();
+const validToken = function () {
+  const {resetToken, id} = useParams();
+  useEffect(() => {
+    const valid = async () => {
+      await connectMongoDB();
 
-//       const token = await Token.findOne({userID: id});
-//       const validToken = await compare(resetToken, token?.token);
+      const token = await Token.findOne({userID: id});
+      const rToken = resetToken.toString()
+      const validToken = await compare(rToken, token?.token);
 
-//       if (validToken) {
-//         return true;
-//       }
-//       return false;
-//     };
-//   }, [resetToken, id]);
-// };
+      if (validToken) {
+        return true;
+      }
+      return false;
+    };
+  }, [resetToken, id]);
+};
