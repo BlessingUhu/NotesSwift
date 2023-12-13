@@ -1,26 +1,39 @@
 "use client";
 import Link from "next/link";
-
 import show_password from "/public/show_password.png";
 import hide_password from "/public/hide_password.png";
 import Image from "next/image";
 import logo from "/public/logo.png";
 import {useEffect, useState} from "react";
-import {useRouter} from "next/router";
-import connectMongoDB from "@/lib/mongoose";
-import Token from "@/models/tokenSchema";
-import {createHash} from "crypto";
-import {randomBytes} from "crypto";
-import {compare, hash} from "bcrypt-ts";
-import { useParams } from "next/navigation";
+import {redirect, useParams, useRouter} from "next/navigation";
+import InvalidToken from "../password_reset_error/page";
+import NoPasswordToken from "./no-token";
+import {NextResponse} from "next/server";
 
 export default function ForgotPassword() {
-  // const {resetToken, id} = useRouter().;
+  const router = useRouter();
+  const {resetToken, id} = useParams();
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [visible, setVisibility] = useState(true);
 
-  // console.log(resetToken, id);
+  useEffect(() => {
+    const validToken = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXTAUTH_URL}/api/verify_password`, {
+          method: "POST",
+          headers: {Accept: "application/json"},
+          body: JSON.stringify({resetToken, id}),
+        });
+        if (!response.ok) {
+          return router.push("/password_reset_error");
+        }
+      } catch (error) {
+        return router.push("/password_reset_error");
+      }
+    };
+    validToken();
+  }, [resetToken, id]);
 
   const handleSubmit = () => {};
   return (
@@ -71,21 +84,3 @@ export default function ForgotPassword() {
     </>
   );
 }
-
-const validToken = function () {
-  const {resetToken, id} = useParams();
-  useEffect(() => {
-    const valid = async () => {
-      await connectMongoDB();
-
-      const token = await Token.findOne({userID: id});
-      const rToken = resetToken.toString()
-      const validToken = await compare(rToken, token?.token);
-
-      if (validToken) {
-        return true;
-      }
-      return false;
-    };
-  }, [resetToken, id]);
-};

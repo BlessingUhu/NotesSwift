@@ -31,7 +31,6 @@ export default function EmailPasswordReset() {
       });
 
       const user = await response.json();
-      console.log(user,response.ok)
       if (user && response.ok) {
         isEmailSent(true);
         return NextResponse.json({success: "Email sent."}, {status: 201});
@@ -86,7 +85,7 @@ export default function EmailPasswordReset() {
           </form>
         </div>
 
-        {emailSent && <div className="emailSent">An email has been sent you to reset your password.</div>}
+        {emailSent && <div className="emailSent">An email has been sent to you to reset your password.</div>}
       </section>
     </>
   );

@@ -29,7 +29,6 @@ export async function POST(req: NextRequest) {
     // const hashedToken = createHash("sha256").update(resetToken).digest("hex");
     const resetToken = randomBytes(16).toString("hex");
     const hashedToken = await hash(resetToken, 10);
-    console.log(resetToken, hashedToken);
 
     // Saving token to database:
     const token = Token.create({

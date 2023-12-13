@@ -10,7 +10,7 @@ At least 8 characters in length, but no more than 32.
 
 
 *TODO 1*
-- Create a functionality to reset password. 
+- Create a functionality to reset password.  [CHECK!]
 - Show user's name on the navigation bar.
 - While trying to login user in, show a loading page.
 - Create an account section for user to view their information and change their password.
