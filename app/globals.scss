@@ -18,15 +18,23 @@ a {
 }
 
 //Navigation
-
 .navBar-section {
+  scroll-behavior: smooth;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  z-index: 999;
   position: fixed;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-  z-index: -999;
   width: 100%;
-  display: block;
+  background-color: white;
   height: max-content;
   overflow: hidden;
+
+  .nav-user {
+    text-align: center;
+    padding-top: 1%;
+    p {
+      margin: 0;
+    }
+  }
 
   .topNavContainter {
     display: flex;
@@ -65,25 +73,49 @@ a {
       img {
         cursor: pointer;
       }
-      .navBarlistsActive {
-        @extend .navBarlists;
-        border-bottom: solid 3px $primary-hover;
-      }
       width: 30%;
     }
   }
 }
 
+.account_list {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  height: 160px;
+  background-color: white;
+  padding: 10px;
+  margin-top: 80px;
+  margin-left: 76%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: absolute;
+  border-radius: 5px;
+
+  div {
+    background-color: $primary-hover;
+    padding: 8px;
+    border-radius: 5px;
+  }
+
+  a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+.account_list[hidden] {
+  display: none;
+}
+
 //Sidebar
 .sideBar-Section {
-  border: none;
+  scroll-behavior: smooth;
   background-color: $backgroundColor;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   height: 100%;
   position: fixed;
-  display: block;
+  top: 10.5%;
   width: 20%;
-  top: 10.4%;
 
   .sideBar-containter {
     display: flex;
@@ -96,22 +128,43 @@ a {
       @extend .sideBar-containter;
       margin-top: 80px;
       align-items: unset;
-      height: 25%;
+      height: 30%;
       justify-content: space-around;
       .sideBar-contents {
         display: flex;
+        justify-content: space-between;
         color: $text-white;
-        width: max-content;
+        width: 55%;
         align-items: center;
-        padding-left: 80px;
+        padding-left: 70px;
+        .sideBar-notes-list {
+          display: flex;
+        }
+        .note-count {
+          box-sizing: border-box;
+
+          span {
+            background-color: $text-black;
+            color: $text-white;
+            box-sizing: border-box;
+            padding: 5px;
+            border-radius: 5px;
+            width: fit-content;
+          }
+        }
+
         .material-symbols-outlined {
-          padding-right: 10px;
+          margin-right: 10px;
           color: $text-black;
         }
       }
     }
   }
 }
+// //Sidebar collapsed/ no display
+// .sideBar-Section-disabled {
+//   display: none;
+// }
 
 //Account
 
@@ -122,7 +175,7 @@ a {
   align-items: center;
 
   h1 {
-    color: $secondary;
+    color: $text-black;
     margin-top: 10px;
     margin-bottom: 30px;
   }
@@ -131,13 +184,16 @@ a {
   }
   .accountContainer {
     .error {
-      padding: 10px;
+      margin-top: 8px;
+      box-sizing: border-box;
       padding-left: 0px;
       height: max-content;
 
       small {
-        padding: 10px;
+        box-sizing: border-box;
+        padding: 5px;
         height: max-content;
+        color: $text-white;
         background-color: $warning;
         border-radius: 5px;
       }
@@ -179,15 +235,15 @@ a {
         height: 100%;
         padding: 15px;
         font-size: 20px;
-        background-color: $secondary;
-        color: white;
+        background-color: $primary;
+        color: $text-black;
         border: none;
         cursor: pointer;
         border-radius: $border-radius;
         transition: 0.7 ease-in-out;
       }
       button:hover {
-        background-color: $secondary-hover;
+        background-color: $primary-hover;
       }
       button:disabled {
         background-color: $disabled;
@@ -211,14 +267,6 @@ a {
       @extend .formInput;
     }
   }
-  .emailSent {
-    font-size: 20px;
-    margin-top: 35px;
-    width: max-content;
-    background-color: $success;
-    padding: 20px;
-    border-radius: 5px;
-  }
 }
 
 //GoogleLogin Button
@@ -235,4 +283,50 @@ a {
     height: inherit;
     text-align: center;
   }
+}
+
+//Error Section
+
+.errorSection {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .errorWrapper {
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 20px;
+    margin-top: 30px;
+    h1 {
+      margin-bottom: 5px;
+      color: $warning;
+      color: $text-white;
+      font-weight: 800;
+    }
+    .infoMessage {
+      align-self: center;
+      margin-bottom: 50px;
+      small {
+        display: flex;
+        align-items: center;
+        img {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+  .backToHome {
+    font-size: 20px;
+    margin-top: 30px;
+    a {
+      font-weight: 600;
+      text-decoration: underline;
+    }
+  }
+}
+
+.openSidebar {
+  padding-top: 100px;
+  margin-left: 20%;
 }

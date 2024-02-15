@@ -2,8 +2,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import logo from "/public/logo.png";
+import success from "/public/success.png";
 import {FormEventHandler, useState} from "react";
 import {NextResponse} from "next/server";
+import MessageAlert from "@/components/modal";
+
 
 export default function EmailPasswordReset() {
   const [email, setEmail] = useState("");
@@ -16,13 +19,14 @@ export default function EmailPasswordReset() {
 
     if (!validatedEmail) {
       setEmailError("An email is required");
+      return;
     } else if (!validatedEmail.match(/.+\@.+\..+/)) {
       setEmailError("Invalid email format. Example: email@domain.com");
       return;
     } else setEmailError("");
 
     try {
-      const response = await fetch(`${process.env.NEXTAUTH_URL}/api/password_reset`, {
+      const response = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/send_password_reset`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +37,6 @@ export default function EmailPasswordReset() {
       const user = await response.json();
       if (user && response.ok) {
         isEmailSent(true);
-        return NextResponse.json({success: "Email sent."}, {status: 201});
       } else {
         setEmailError("That email address does not exist in our system.");
         isEmailSent(false);
@@ -43,15 +46,26 @@ export default function EmailPasswordReset() {
       return NextResponse.json(error);
     }
   };
+
   return (
     <>
+      {emailSent && (
+        <MessageAlert
+          image={success}
+          title="Password Link Sent To Email"
+          message="An email has been sent to you to reset your password."
+          nextAction={() => {
+            window.location.reload();
+          }}
+        />
+      )}
       <section className="accountSection">
         <div className="accountNavBar">
           <Link href={"/welcome"}>
             <Image alt={"Website logo"} src={logo} height={50} width={50} />
           </Link>
         </div>
-        <h1>Please enter your email to receive the password reset link</h1>
+        <h1>Enter email to receive the password reset link</h1>
         <div className="accountContainer">
           <form noValidate onSubmit={handleSubmit}>
             {/* Email */}
@@ -84,8 +98,6 @@ export default function EmailPasswordReset() {
             </div>
           </form>
         </div>
-
-        {emailSent && <div className="emailSent">An email has been sent to you to reset your password.</div>}
       </section>
     </>
   );

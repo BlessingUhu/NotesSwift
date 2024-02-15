@@ -25,6 +25,7 @@ export default function Signin() {
 
     if (!validatedEmail) {
       setEmailError("An email is required");
+      return;
     } else if (!validatedEmail.match(/.+\@.+\..+/)) {
       setEmailError("Invalid email. Example: email@domain.com");
       return;
@@ -32,6 +33,7 @@ export default function Signin() {
 
     if (!password) {
       setPasswordError("A password is required");
+      return;
     } else if (!password.match(/\d/)) {
       setPasswordError("Password must contain least one digit");
       return;
@@ -55,23 +57,15 @@ export default function Signin() {
         password,
         redirect: false,
       });
-      console.log(res)
       if (res?.ok) {
-        router.replace("/");
-      }
-      if (res?.error) {
+        return router.replace("/");
+      } else {
         setFormError("Invalid Email or Password");
-        return NextResponse.json({message: "User entered invalid credentials" + res.error}, {status: res.status});
+        return NextResponse.json({message: "User entered invalid credentials"}, {status: 401});
       }
     } catch (error) {
-      return NextResponse.json({message: "Error occurred while trying to login user" + error}, {status: 404});
+      return NextResponse.json({message: "Error occurred while trying to login user" + error}, {status: 500});
     }
-  };
-  const isDisabled = () => {
-    if (password == "" && email == "") {
-      return true;
-    }
-    return false;
   };
 
   return (
@@ -113,7 +107,7 @@ export default function Signin() {
                 placeholder="Password"
               />
               <div className="passwordVisibility" onClick={() => setVisibility(!visible)}>
-                <Image alt="hide password" src={visible ? hide_password : show_password} width={25} height={25}></Image>
+                <Image alt="hide password" src={visible ? show_password : hide_password} width={25} height={25}></Image>
               </div>
 
               {passwordError && (
@@ -125,9 +119,7 @@ export default function Signin() {
 
             {/* Button */}
             <div className="formInput">
-              <button  type="submit">
-                Login
-              </button>
+              <button type="submit">Login</button>
             </div>
 
             {formError && (
@@ -142,7 +134,7 @@ export default function Signin() {
             </div>
             <div className="accountAlready">
               <p>
-                Don't have an account? Please{"  "}
+                Don&apos;t have an account? Please{"  "}
                 <span>
                   <Link href="/register">Create an account</Link>
                 </span>

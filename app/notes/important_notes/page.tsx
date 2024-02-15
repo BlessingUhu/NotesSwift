@@ -1,25 +1,24 @@
 "use client";
 
-import dayjs from "dayjs";
-import React from "react";
-import useSWR from "swr";
-import Image from "next/image";
-import Loading from "./loading";
-import edit from "/public/edit.png";
-import {useRouter} from "next/navigation";
-import {TimePicker} from "@mui/x-date-pickers";
-import styles from "./styles/Notes.module.scss";
+import Loading from "@/app/loading";
 import Navigation from "@/components/navigation";
-import autoSizeTextArea from "@/lib/autoSizeTextArea";
+import styles from "/app/styles/Notes.module.scss";
+import {TimePicker} from "@mui/x-date-pickers";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {Suspense, useEffect, useRef, useState} from "react";
-import important_shaded from "/public/important_shaded.png";
+import dayjs from "dayjs";
+import edit from "/public/edit.png";
+import {usePathname, useRouter} from "next/navigation";
+import Image from "next/image";
+import {getAllNotes, handleDelete, updateImportantNote} from "@/lib/noteFunctions";
+import autoSizeTextArea from "@/lib/autoSizeTextArea";
+import React from "react";
+import useSWR, {preload} from "swr";
 import important_unshaded from "/public/important_unshaded.png";
+import important_shaded from "/public/important_shaded.png";
 import {dayIsTomorrow, isDueToday, isPastDue} from "@/lib/reminder";
-import {getAllNotes, handleDelete, updateImportantNote} from "../lib/noteFunctions";
-import {useSession} from "next-auth/react";
 
-export default function ViewLists() {
+export default function ImportantNotes() {
   const [allNotes, setAllNotes] = useState<any[]>([]);
   const [isChecked, setChecked] = useState<Boolean>(false);
   const [markedImportant, setImportant] = useState(false);
@@ -29,42 +28,21 @@ export default function ViewLists() {
   const [valueContents, setValueContents] = useState<{description: string; index: number}>({description: "", index: 0});
   const ref = useRef(new Array());
   const router = useRouter();
-  const {data: session, status} = useSession();
+  const path = usePathname();
 
+  preload(`${process.env.NEXTAUTH_URL}/api/note/`, getAllNotes);
   const {data} = useSWR(`${process.env.NEXTAUTH_URL}/api/note/`, getAllNotes);
 
-  if (status == "unauthenticated") {
-    router.replace("/login");
-    window.location.reload();
-  }
   useEffect(() => {
     if (data) {
-      setAllNotes(data);
+      const filteredNotes = data.filter((note: any) => {
+        return note.markedImportant == true;
+      });
+      setAllNotes(filteredNotes);
     }
   }, [data]);
 
-  useEffect(() => {
-    const importantNoteUpdate = async () => {
-      if (noteID && markedImportant) {
-        const response = await updateImportantNote(noteID, markedImportant)
-          .then((result) => {
-            if (result.ok) {
-              isAlertVisibile(true);
-              setAlertMessage("Note Marked Important");
-              setTimeout(() => {
-                isAlertVisibile(false);
-              }, 950);
-            }
-          })
-          .then(() => {
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000);
-          });
-      }
-    };
-    importantNoteUpdate();
-  }, [markedImportant, noteID]);
+  autoSizeTextArea(ref.current[valueContents.index], valueContents.description);
 
   useEffect(() => {
     const deleteNote = async () => {
@@ -84,19 +62,16 @@ export default function ViewLists() {
           })
           .then(() => {
             setTimeout(() => {
-              router.refresh()
-              // window.location.reload();
+              window.location.reload();
             }, 900);
           });
       }
     };
     deleteNote();
-  }, [isChecked, noteID, router]);
-
-  autoSizeTextArea(ref.current[valueContents.index], valueContents.description);
+  }, [isChecked, noteID]);
 
   const isEditClicked = (id: string) => {
-    router.push(`notes/edit_note/${id}`);
+    router.push(`/notes/edit_note/${id}`);
   };
 
   return (
@@ -105,10 +80,8 @@ export default function ViewLists() {
         <Navigation />
         <main>
           <section className={styles.addTodo_section}>
-            {alertVisibile && <div className={styles.alertVisibile}>{alertMessage}</div>}
-            {/* {allNotes.length <= 0 && <div className={styles.noNotes}>No Notes Added</div>} */}
             <div>
-              {allNotes.map((note, index) => {
+              {allNotes.map((note: any, index: any) => {
                 return (
                   <div className={styles.formContainer} key={note._id}>
                     <div className={styles.formCheckBox}>
@@ -124,6 +97,7 @@ export default function ViewLists() {
                     </div>
                     <form>
                       <div className={styles.formWrapperReadOnly}>
+                        {alertVisibile && <div className={styles.alertVisibile}>{alertMessage}</div>}
                         {isDueToday(note.reminderDate, note.reminderTime) && <div className={styles.dueToday}> Due Today</div>}
                         {isPastDue(note.reminderDate, note.reminderTime) && <div className={styles.pastDue}>Past Due</div>}
                         {dayIsTomorrow(note.reminderDate) && <div className={styles.dueTomorrow}>Due Tomorrow</div>}
@@ -186,6 +160,7 @@ export default function ViewLists() {
                               value={note.reminderDate ? dayjs(note.reminderDate) : undefined}
                             />
                           </div>
+
                           <div>
                             <TimePicker
                               name="time"

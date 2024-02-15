@@ -1,0 +1,45 @@
+.modal_wrapper {
+  width: 30%;
+  position: absolute;
+  top: 25%;
+  left: 35%;
+  border-radius: $border-radius;
+  height: fit-content;
+  z-index: 999;
+
+  .modal_container {
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 100px 750px;
+    background-color: $primary-hover;
+    border-radius: $border-radius;
+    color: $text-black;
+    width: inherit;
+    height: inherit;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.6s;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+
+    h1 {
+      margin-bottom: 20px;
+    }
+    p {
+      word-break: break-word;
+    }
+
+    .close_button {
+      margin-top: 50px;
+      button {
+        font-size: 25px;
+        border-radius: 10px;
+        padding: 10px;
+        color: $text-white;
+        background-color: black;
+        border: none;
+        cursor: pointer;
+      }
+    }
+  }
+}

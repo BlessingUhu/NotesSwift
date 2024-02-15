@@ -4,11 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import logo from "/public/logo.png";
 import {NextResponse} from "next/server";
+import success from "/public/success.png";
 import {useRouter} from "next/navigation";
 import {FormEventHandler, useState} from "react";
 import show_password from "/public/show_password.png";
 import hide_password from "/public/hide_password.png";
 import GoogleLogin from "@/components/googlebutton";
+import MessageAlert from "@/components/modal";
 
 export default function CreateNewUser() {
   const router = useRouter();
@@ -20,6 +22,7 @@ export default function CreateNewUser() {
   const [visible, setVisibility] = useState(true);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [accountCreated, isAccountCreated] = useState(false);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     const validatedEmail = email.toLowerCase();
@@ -27,6 +30,7 @@ export default function CreateNewUser() {
 
     if (!name) {
       setNameError("A name is required");
+      return;
     } else if (name.match(/\d/)) {
       setNameError("Your name must not contain a number");
       return;
@@ -34,6 +38,7 @@ export default function CreateNewUser() {
 
     if (!validatedEmail) {
       setEmailError("An email is required");
+      return;
     } else if (!validatedEmail.match(/.+\@.+\..+/)) {
       setEmailError("Invalid email. Example: email@domain.com");
       return;
@@ -41,6 +46,7 @@ export default function CreateNewUser() {
 
     if (!password) {
       setPasswordError("A password is required");
+      return;
     } else if (!password.match(/\d/)) {
       setPasswordError("Password must contain least one digit");
       return;
@@ -59,7 +65,7 @@ export default function CreateNewUser() {
     } else setPasswordError("");
 
     try {
-      const existingRes = await fetch(`${process.env.NEXTAUTH_URL}/api/existingemail`, {
+      const existingRes = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/existingemail`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +81,7 @@ export default function CreateNewUser() {
         setFormError("");
       }
 
-      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/register`, {
+      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/register`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -85,9 +91,9 @@ export default function CreateNewUser() {
       });
 
       if (res.ok) {
-        router.push("/");
-        return NextResponse.json({sucess: "Account created."}, {status: 201});
+        isAccountCreated(true);
       } else {
+        isAccountCreated(false);
         return NextResponse.json({error: "Error Posting User"}, {status: 400});
       }
     } catch (error) {
@@ -97,6 +103,17 @@ export default function CreateNewUser() {
 
   return (
     <>
+      {accountCreated && (
+        <MessageAlert
+          title="Account Created Successfully"
+          message="Thank you for creating an account. Please login with your email and password."
+          image={success}
+          nextAction={() => {
+            router.push("/login");
+            return NextResponse.json({success: "Account created."}, {status: 201});
+          }}
+        />
+      )}
       <section className="accountSection">
         <div className="accountNavBar">
           <Link href={"/welcome"}>
@@ -151,7 +168,7 @@ export default function CreateNewUser() {
                 placeholder="Password"
               />
               <div className="passwordVisibility" onClick={() => setVisibility(!visible)}>
-                <Image alt="hide password" src={visible ? hide_password : show_password} width={25} height={25}></Image>
+                <Image alt="hide password" src={visible ? show_password : hide_password} width={25} height={25}></Image>
               </div>
               {passwordError && (
                 <div className="error">
