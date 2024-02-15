@@ -107,7 +107,7 @@ export default function ViewLists() {
             {alertVisibile && <div className={styles.alertVisibile}>{alertMessage}</div>}
             {/* {allNotes.length <= 0 && <div className={styles.noNotes}>No Notes Added</div>} */}
             <div>
-              {allNotes.map((note, index) => {
+              {allNotes?.map((note, index) => {
                 return (
                   <div className={styles.formContainer} key={note._id}>
                     <div className={styles.formCheckBox}>
