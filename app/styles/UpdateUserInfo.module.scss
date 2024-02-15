@@ -1,5 +1,3 @@
-@import "../variables.scss";
-
 
 //update info nav
 .previous {
@@ -19,7 +17,7 @@
   //   border: dashed;
   h1 {
     margin-bottom: 50px;
-    color: $primary;
+    color: var(--primary);
   }
   .account_nav_wrapper {
     display: flex;
@@ -63,18 +61,18 @@
           box-sizing: border-box;
           outline: none;
           transition: ease-in 0.5s;
-          background-color: $input-backgroundColor;
+          background-color: var(--input-backgroundColor);
           border: none;
-          border-radius: $border-radius;
+          border-radius: var(--border-radius);
           overflow: visible;
         }
         input:focus {
-          background-color: $input-backgroundColorLighter;
+          background-color: var(--input-backgroundColorLighter);
           box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
         }
       }
       small {
-        background-color: $warning;
+        background-color: var(--warning);
         padding: 5px;
         display: block;
         width: max-content;
@@ -88,12 +86,12 @@
         button {
           cursor: pointer;
           font-size: 20px;
-          background-color: $primary;
-          color: $text-black;
+          background-color: var(--primary);
+          color: var(--text-black);
           width: 100%;
           padding: 4%;
           border: none;
-          border-radius: $border-radius;
+          border-radius: var(--border-radius);
         }
       }
     }

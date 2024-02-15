@@ -27,7 +27,7 @@ export default async function Dashboard() {
               <Link href="/login">
                 <button className={styles.login}>Log in</button>
               </Link>
-              <p>---------------or--------------</p>
+              <p>-------------------OR-------------------</p>
 
               <Link href="/register">
                 <button className={styles.create_account}>Create Account</button>

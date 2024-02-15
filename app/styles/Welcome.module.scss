@@ -1,6 +1,3 @@
-@import "../variables.scss";
-
-
 .main_container {
   height: 100%;
   margin-top: 2%;
@@ -17,7 +14,7 @@
         display: flex;
         span {
           font-size: 150px;
-          color: $primary;
+          color: var(--primary);
         }
       }
     }
@@ -36,10 +33,10 @@
         }
 
         .login {
-          border-radius: $border-radius;
+          border-radius: var(--border-radius);
           border: none;
-          background-color: $secondary;
-          color: $text-white;
+          background-color: var(--secondary);
+          color: var(--text-white);
           font-size: 25px;
           padding: 15px;
           cursor: pointer;
@@ -48,8 +45,8 @@
         }
         .create_account {
           @extend .login;
-          background-color: $primary;
-          color: $text-black;
+          background-color: var(--primary);
+          color: var(--text-black);
         }
         p {
           margin-top: 30px;
