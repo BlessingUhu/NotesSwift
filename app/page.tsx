@@ -84,14 +84,13 @@ export default function ViewLists() {
           })
           .then(() => {
             setTimeout(() => {
-              router.refresh()
-              // window.location.reload();
+              window.location.reload();
             }, 900);
           });
       }
     };
     deleteNote();
-  }, [isChecked, noteID, router]);
+  }, [isChecked, noteID]);
 
   autoSizeTextArea(ref.current[valueContents.index], valueContents.description);
 
