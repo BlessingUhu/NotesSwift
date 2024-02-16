@@ -37,6 +37,7 @@ export default function ViewLists() {
     router.replace("/login");
     window.location.reload();
   }
+  
   useEffect(() => {
     if (data) {
       setAllNotes(data);
